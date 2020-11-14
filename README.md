@@ -1,5 +1,8 @@
 ## 一、说在前面
 本项目是个人为了学习springboot开发的项目，参考了一些开源项目和学习视频，项目中的一些功能注释都是已经写好了，会有一些瑕疵、未完善的地方，仅供参考学习使用。
+下载地址1：[Github](https://github.com/ChangeWeDer/crm)
+下载地址2（推荐）：[Gitee](https://gitee.com/changeWeder/crm)
+博客地址：[博客地址](https://www.upstudy.top/index.php/archives/39/)
 ***
 ## 二、技术栈
 1. springboot
