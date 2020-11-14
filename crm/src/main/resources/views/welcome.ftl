@@ -23,11 +23,10 @@
                 <p>8.分页工具 PageHelper</p>
                 <p>9.插件（注解生成get set方法）Lombok</p>
 
-                <p>GitHub地址：
-                    <iframe src="https://ghbtns.com/github-btn.html?user=zhongshaofa&repo=layuimini&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
-                    <iframe src="https://ghbtns.com/github-btn.html?user=zhongshaofa&repo=layuimini&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
-                </p>
-                <p>Gitee地址：<a href="https://gitee.com/zhongshaofa/layuimini" target="_blank"><img src="https://gitee.com/zhongshaofa/layuimini/badge/star.svg?theme=dark" alt="star"></a> <a href="https://gitee.com/zhongshaofa/layuimini" target="_blank"><img src="https://gitee.com/zhongshaofa/layuimini/badge/fork.svg?theme=dark" alt="fork"></a></p>
+
+                <p>github    <a class="layui-btn layui-btn-xs layui-btn-normal" target="_blank" href="https://github.com/ChangeWeDer/crm">github地址</a></p>
+                
+                <p>gitee     <a class="layui-btn layui-btn-xs layui-btn-normal" target="_blank" href="https://gitee.com/changeWeder/crm">gitee地址</a></p>
             </blockquote>
         </div>
     </div>
