@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerLossMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CustomerLoss" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cus_no" property="cusNo" jdbcType="VARCHAR" />
+        <result column="cus_name" property="cusName" jdbcType="VARCHAR" />
+        <result column="cus_manager" property="cusManager" jdbcType="VARCHAR" />
+        <result column="last_order_time" property="lastOrderTime" jdbcType="DATE" />
+        <result column="confirm_loss_time" property="confirmLossTime" jdbcType="DATE" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="loss_reason" property="lossReason" jdbcType="VARCHAR" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, cus_no, cus_name, cus_manager, last_order_time, confirm_loss_time, state, loss_reason,
+    is_valid, create_date, update_date
+    </sql>
+
+    <!-- 通过参数查询流失用户 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.CustomerLossQuery" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List"/>
+        from t_customer_loss
+        <where>
+            is_valid=1
+            <if test="null !=cusNo and cusNo!=''">
+                and cus_no=#{cusNo}
+            </if>
+            <if test="null !=cusName and cusName!=''">
+                and cus_name like concat('%',#{cusName},'%')
+            </if>
+            <if test="null !=state">
+                and state=#{state}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.Role" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="role_remark" property="roleRemark" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, role_name, role_remark, create_date, update_date, is_valid
+    </sql>
+
+    <!-- 查询所有角色 通过传入user_id查询中间表中的角色id，然后通过角色id的到role表中的信息，并且加上selected字段，方便前端显示已选 -->
+    <select id="queryAllRoles" parameterType="int" resultType="map">
+    SELECT
+        r1.id,
+        r1.role_name as roleName,
+    CASE
+            WHEN IFNULL( temp.role_id, 0 ) = 0 THEN
+            "" ELSE "selected"
+        END AS "selected"
+    FROM
+        t_role r1
+        LEFT JOIN ( SELECT role_id FROM t_user_role r2 WHERE r2.user_id = #{userId} ) temp ON r1.id = temp.role_id
+    WHERE
+        r1.is_valid =1
+  </select>
+
+    <!-- 通过传入角色名查询 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.RoleQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_role
+        <where>
+            is_valid=1
+            <if test="null !=roleName and roleName !=''">
+                and role_name like concat('%',#{roleName},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.OrderDetailsMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.OrderDetails" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+        <result column="unit" property="unit" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="REAL" />
+        <result column="sum" property="sum" jdbcType="REAL" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, order_id, goods_name, goods_num, unit, price, sum, is_valid, create_date, update_date
+    </sql>
+
+    <!-- 查询订单详情 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.OrderDetailsQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_order_details
+        where is_valid=1 and order_id=#{orderId}
+    </select>
+
+</mapper>

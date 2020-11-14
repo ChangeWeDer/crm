@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerServeMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CustomerServe" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="serve_type" property="serveType" jdbcType="VARCHAR" />
+        <result column="overview" property="overview" jdbcType="VARCHAR" />
+        <result column="customer" property="customer" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="service_request" property="serviceRequest" jdbcType="VARCHAR" />
+        <result column="create_people" property="createPeople" jdbcType="VARCHAR" />
+        <result column="assigner" property="assigner" jdbcType="VARCHAR" />
+        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP" />
+        <result column="service_proce" property="serviceProce" jdbcType="VARCHAR" />
+        <result column="service_proce_people" property="serviceProcePeople" jdbcType="VARCHAR" />
+        <result column="service_proce_time" property="serviceProceTime" jdbcType="TIMESTAMP" />
+        <result column="service_proce_result" property="serviceProceResult" jdbcType="VARCHAR" />
+        <result column="satisfaction" property="satisfaction" jdbcType="VARCHAR" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, serve_type, overview, customer, state, service_request, create_people, assigner,
+    assign_time, service_proce, service_proce_people, service_proce_time, service_proce_result,
+    satisfaction, is_valid, update_date, create_date
+    </sql>
+
+    <!-- 查询客户服务 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.CustomerServeQuery" resultType="top.upstudy.crm.pojo.CustomerServe">
+        select c.*,d.data_dic_value as dicValue
+        from t_customer_serve c left join t_datadic d on c.serve_type = d.id
+        <where>
+            c.is_valid=1
+            <if test="null !=customer and customer !=''">
+                and customer like concat('%',#{customer},'%')
+            </if>
+            <if test="null !=serveType">
+                and serve_type =#{serveType}
+            </if>
+            <if test="null !=state and state !=''">
+                and state =#{state}
+            </if>
+            <if test="null !=assigner ">
+                and assigner =#{assigner}
+            </if>
+        </where>
+    </select>
+
+</mapper>

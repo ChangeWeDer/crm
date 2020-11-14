@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerContactMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CustomerContact" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cus_id" property="cusId" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="overview" property="overview" jdbcType="VARCHAR" />
+        <result column="contact_date" property="contactDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!-- 查询所有联系 -->
+    <select id="selectAll" parameterType="top.upstudy.crm.query.CustomerContactQuery" resultMap="BaseResultMap">
+        select id,cus_id,contact_time,address,overview,create_date,update_date,is_valid
+        from t_customer_contact
+        where is_valid = 1 and cus_id=#{cusId}
+    </select>
+
+</mapper>

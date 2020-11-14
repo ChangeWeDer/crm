@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.Customer" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="cus_manager" property="cusManager" jdbcType="VARCHAR" />
+        <result column="level" property="level" jdbcType="VARCHAR" />
+        <result column="satisfaction" property="satisfaction" jdbcType="VARCHAR" />
+        <result column="reputation" property="reputation" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="fax" property="fax" jdbcType="VARCHAR" />
+        <result column="web_site" property="webSite" jdbcType="VARCHAR" />
+        <result column="business_license" property="businessLicense" jdbcType="VARCHAR" />
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+        <result column="registered_capital" property="registeredCapital" jdbcType="VARCHAR" />
+        <result column="turnover" property="turnover" jdbcType="VARCHAR" />
+        <result column="bank" property="bank" jdbcType="VARCHAR" />
+        <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
+        <result column="local_tax_num" property="localTaxNum" jdbcType="VARCHAR" />
+        <result column="national_tax_num" property="nationalTaxNum" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, customer_id, name, area, cus_manager, level, satisfaction, reputation, address, post_code, phone, fax,
+    web_site, business_license, legal_person, registered_capital, turnover, bank, account_number, local_tax_num, national_tax_num, state, is_valid, create_date,
+    update_date
+    </sql>
+
+    <!-- 通过参数查询 state:1 未流失-->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.CustomerQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_customer
+        <where>
+            is_valid=1 and state=1
+            <if test="null !=Name and Name !=''">
+                and   name like concat('%',#{Name},'%')
+            </if>
+            <if test="null !=customerId and customerId !=''">
+                and customer_id =#{customerId}
+            </if>
+            <if test="null !=level and level !=''">
+                and level =#{level}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询流失客户 -->
+    <select id="queryLossCustomers" resultType="top.upstudy.crm.pojo.Customer">
+      SELECT
+        *
+      FROM
+        t_customer c
+      WHERE
+        c.is_valid = 1
+        AND c.state = 1
+        AND DATE_ADD( c.create_date, INTERVAL 6 MONTH ) &lt; NOW()
+        AND c.id NOT IN (
+          SELECT DISTINCT
+          o.cus_id
+          FROM
+          t_customer_order o
+          WHERE
+          o.is_valid = 1
+          AND o.state
+          AND DATE_ADD( o.order_date, INTERVAL 6 MONTH ) &gt; NOW()
+      )
+    </select>
+
+    <!-- 更新客户状态 -->
+    <update id="updateCustomerStateByIds" parameterType="list">
+        update t_customer set state=0
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 查询客户贡献 -->
+    <select id="queryCustomerContributionByParams" parameterType="top.upstudy.crm.query.CustomerQuery" resultType="java.util.Map">
+        select
+        c.name,
+        sum(d.sum) as total
+        from t_customer c left join  t_customer_order o on c.id=o.cus_id
+        left join t_order_details d on o.id=d.order_id
+        <where>
+            c.is_valid=1 and c.state=1 and o.is_valid=1 and o.state=1
+            <if test="null !=Name and Name !=''">
+                and  c.name like concat('%',#{Name},'%')
+            </if>
+            <if test="null !=time and time !=''">
+                and  o.order_date &gt;#{time}
+            </if>
+        </where>
+        group by c.name
+        <if test="null !=type">
+            <if test="type==1">
+                having total &lt;=1000
+            </if>
+            <if test="type==2">
+                having total &gt;1000 and total &lt;=3000
+            </if>
+            <if test="type==3">
+                having total &gt;3000 and total &lt;=5000
+            </if>
+            <if test="type==5">
+                having total &gt;5000
+            </if>
+        </if>
+        order by total desc
+    </select>
+
+    <!-- 客户构成图 -->
+    <select id="countCustomerMake" resultType="java.util.Map">
+       select
+         level,
+         count(1) as total
+       from t_customer
+       where is_valid=1 and state=1
+       group by  level
+    </select>
+
+    <!-- 客户服务图 -->
+    <select id="countCustomerServe" resultType="java.util.Map">
+       select
+         data_dic_value,
+         count(1) as total
+       from t_customer_serve s LEFT JOIN t_datadic d on
+			 s.serve_type=d.id
+       where s.is_valid=1
+       group by  serve_type
+    </select>
+</mapper>

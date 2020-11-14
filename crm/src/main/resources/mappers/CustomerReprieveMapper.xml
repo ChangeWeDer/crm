@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerReprieveMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CustomerReprieve" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="loss_id" property="lossId" jdbcType="INTEGER" />
+        <result column="measure" property="measure" jdbcType="VARCHAR" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, loss_id, measure, is_valid, create_date, update_date
+    </sql>
+
+    <!-- 查询暂缓流失客户 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.CustomerReprQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_customer_reprieve
+        where  is_valid=1 and loss_id=#{lossId}
+    </select>
+</mapper>

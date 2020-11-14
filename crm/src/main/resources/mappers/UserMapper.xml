@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.User">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+        <result column="true_name" jdbcType="VARCHAR" property="trueName" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_name, user_password, true_name, email, phone, is_valid, create_date, update_date
+    </sql>
+
+    <!-- 通过名字查询对应用户 -->
+    <select id="queryUserByUserName" parameterType="string" resultType="top.upstudy.crm.pojo.User">
+        select <include refid="Base_Column_List"/>
+        from t_user
+        where user_name = #{userName}
+    </select>
+
+    <!-- 查询所有销售人员，作为分配人 -->
+    <select id="queryAllSales" resultType="java.util.Map">
+    SELECT
+        u.id,
+        u.user_name AS assignName
+    FROM
+        t_user u
+        LEFT JOIN t_user_role ur ON u.id = ur.user_id
+        LEFT JOIN t_role r ON ur.role_id = r.id
+    WHERE
+        u.is_valid = 1
+        AND r.is_valid = 1
+        AND r.role_name = "销售"
+  </select>
+
+    <!-- 通过传入参数查询用户 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.UserQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_user
+        <where>
+            is_valid=1
+            <if test="null !=userName and userName !=''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="null !=email and email !=''">
+                and email=#{email}
+            </if>
+            <if test="null !=phone and phone !=''">
+                and phone =#{phone}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询所有客户经理 -->
+    <select id="queryAllCustomerManager" resultType="java.util.Map">
+        SELECT
+          u.id,
+          u.user_name AS uname
+      FROM
+          t_user u
+          LEFT JOIN t_user_role ur ON u.id = ur.user_id
+          LEFT JOIN t_role r ON ur.role_id = r.id
+      WHERE
+          u.is_valid = 1
+          AND r.is_valid = 1
+          AND r.role_name = "客户经理"
+    </select>
+
+</mapper>

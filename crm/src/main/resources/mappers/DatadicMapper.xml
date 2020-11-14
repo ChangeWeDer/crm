@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.DatadicMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.Datadic" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="data_dic_name" property="dataDicName" jdbcType="VARCHAR" />
+        <result column="data_dic_value" property="dataDicValue" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, data_dic_name, data_dic_value, create_date, update_date, is_valid
+    </sql>
+    <!-- 查询字典 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.DataDicQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_datadic
+        <where>
+            is_valid=1
+        </where>
+    </select>
+</mapper>

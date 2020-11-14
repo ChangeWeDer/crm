@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CustomerOrderMapper">
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CustomerOrder" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cus_id" property="cusId" jdbcType="INTEGER" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="order_date" property="orderDate" jdbcType="TIMESTAMP" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, cus_id, order_no, order_date, address, state, create_date, update_date, is_valid
+    </sql>
+
+
+    <!-- 查询客户订单 -->
+    <select id="selectByParams"  parameterType="top.upstudy.crm.query.CustomerOrderQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_customer_order
+        where is_valid=1 and cus_id=#{cusId}
+    </select>
+
+    <!-- 查询客户详细订单 -->
+    <select id="queryCustomerOrderByOrderId" parameterType="int" resultType="java.util.Map">
+     select
+      o.id,
+      o.order_no,
+      o.address,
+      sum(d.sum) as total,
+      case  when o.state = 1 then "已支付"
+       else  "未支付" end status
+    from t_customer_order o left join  t_order_details d on o.id=d.order_id
+    where o.is_valid=1 and o.id=#{orderId}
+  </select>
+
+    <!-- 查询客户最后的订单 -->
+    <select id="queryLastCustomerOrderByCusId" parameterType="int" resultType="top.upstudy.crm.pojo.CustomerOrder">
+        select <include refid="Base_Column_List"/>
+        from t_customer_order where cus_id=#{cusId} ORDER BY order_date desc limit 1
+    </select>
+
+</mapper>

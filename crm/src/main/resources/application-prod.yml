@@ -1,0 +1,65 @@
+## 端口号  上下文路径
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# swagger
+swagger:
+  enable: false
+
+#mybatis-plus配置逻辑删除
+mybatis-plus:
+  mapper-locations: classpath:/mappers/*Mapper.xml
+  global-config:
+    db-config:
+      logic-delete-field: is_valid  # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 0 # 逻辑已删除值
+      logic-not-delete-value: 1 # 逻辑未删除值
+## 数据源配置
+spring:
+  # 数据库配置(务必根据实际情况修改配置)
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/crm?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    # 设置连接池为Druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 数据源的其他配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的 filters，去掉后监控界面 sql 无法统计，'wall'用于防火墙
+    filters: stat,wall
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  ## freemarker
+  freemarker:
+    suffix: .ftl
+    content-type: text/html
+    charset: UTF-8
+    template-loader-path: classpath:/views/
+
+
+## pageHelper
+pagehelper:
+  helper-dialect: mysql
+
+## 设置 dao 日志打印级别
+logging:
+  level:
+    top:
+      upstudy:
+        crm:
+          mapper: debug

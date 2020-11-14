@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.PermissionMapper">
+
+    <!-- 通过传入的角色id 查询该角色id所拥有的资源权限-->
+    <select id="queryRoleAllModIds" parameterType="int" resultType="java.lang.Integer">
+      select module_id
+      from t_permission
+      where role_id=#{roleId}
+  </select>
+
+    <!-- 连表查询（中间表 权限表）通过传入的用户id 查询该用户id所拥有的资源权限-->
+    <select id="queryUserHasRoleIdsHasModuleIds" parameterType="int" resultType="java.lang.String">
+      select distinct  p.acl_value
+        from   t_user_role  ur left join t_permission p on ur.role_id = p.role_id
+        where ur.user_id=#{userId}
+  </select>
+
+</mapper>

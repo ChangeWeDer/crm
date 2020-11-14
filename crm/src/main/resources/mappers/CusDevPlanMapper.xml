@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.CusDevPlanMapper">
+
+    <resultMap id="BaseResultMap" type="top.upstudy.crm.pojo.CusDevPlan" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="sale_chance_id" property="saleChanceId" jdbcType="INTEGER" />
+        <result column="plan_item" property="planItem" jdbcType="VARCHAR" />
+        <result column="plan_date" property="planDate" jdbcType="TIMESTAMP" />
+        <result column="exe_affect" property="exeAffect" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, sale_chance_id, plan_item, plan_date, exe_affect, create_date, update_date, is_valid
+    </sql>
+
+    <!-- 查询开发计划列表 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.CusDevPlanQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_cus_dev_plan
+        where  is_valid=1 and sale_chance_id=#{sid}
+    </select>
+
+</mapper>

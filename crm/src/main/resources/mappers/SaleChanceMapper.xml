@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.upstudy.crm.mapper.SaleChanceMapper">
+
+
+    <sql id="Column_List" >
+    id, chance_source, customer_name, success_possibility, overview, link_man, link_phone, description,
+    create_man, assign_man, assign_time, state, dev_result, is_valid, create_date, update_date
+    </sql>
+
+    <!-- 查询营销机会 -->
+    <select id="selectByParams" parameterType="top.upstudy.crm.query.SaleChanceQuery" resultType="top.upstudy.crm.pojo.SaleChance">
+        select   s.id, s.chance_source, s.customer_name, s.success_possibility, s.overview, s.link_man, s.link_phone, s.description,
+        s.create_man, s.assign_man, s.assign_time, s.state, s.dev_result, s.is_valid, s.create_date, s.update_date, u.user_name as assignName
+        from t_sale_chance s left  join  t_user u on s.assign_man = u.id
+        <where>
+            s.is_valid=1
+            <if test="customerName !=null and customerName !=''">
+                and s.customer_name like concat('%',#{customerName},'%')
+            </if>
+            <if test="createMan !=null and createMan !=''">
+                and s.create_man = #{createMan}
+            </if>
+            <if test="state !=null and state !=''">
+                and s.state =#{state}
+            </if>
+            <if test="null !=assignMan">
+                and s.assign_man = #{assignMan}
+            </if>
+            <if test="devResult !=null">
+                and s.dev_result =#{devResult}
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper>
