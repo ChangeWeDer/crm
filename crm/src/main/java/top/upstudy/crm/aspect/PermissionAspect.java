@@ -41,7 +41,7 @@ public class PermissionAspect {
         RequirePermission requirePermission = methodSignature.getMethod().getDeclaredAnnotation(RequirePermission.class);
 
         //查看获取的权限码是否属于角色权限（存在session）
-        methodSignature.getMethod().getDeclaredAnnotation(RequirePermission.class);
+        //methodSignature.getMethod().getDeclaredAnnotation(RequirePermission.class);
         if(!(permissions.contains(requirePermission.code()))){
             throw  new AuthException();
         }
