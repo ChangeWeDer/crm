@@ -27,9 +27,9 @@ layui.use(['form','jquery','jquery_cookie'], function () {
                         time: 2000, //2秒关闭（如果不配置，默认是3秒）
                         shade : [0.6 , '#000' , true],
                     },function () {
-                        $.removeCookie("userId",{domain:"localhost",path:"/"})
-                        $.removeCookie("userName",{domain:"localhost",path:"/"})
-                        $.removeCookie("trueName",{domain:"localhost",path:"/"})
+                        $.removeCookie("userId",{path:"/"})
+                        $.removeCookie("userName",{path:"/"})
+                        $.removeCookie("trueName",{path:"/"})
                         setTimeout(function () {
                             window.parent.location.href = ctx + "/";
                         },);
