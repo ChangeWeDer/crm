@@ -9,9 +9,9 @@ layui.use(['element', 'layer', 'layuimini','jquery','jquery_cookie'], function (
 
     $(".login-out").click(function () {
         layer.confirm('是否登出当前用户?', {icon: 3, title:'提示'}, function(index){
-            $.removeCookie("userId",{domain:"localhost",path:"/"})
-            $.removeCookie("userName",{domain:"localhost",path:"/"})
-            $.removeCookie("trueName",{domain:"localhost",path:"/"})
+            $.removeCookie("userId",{path:"/"})
+            $.removeCookie("userName",{path:"/"})
+            $.removeCookie("trueName",{path:"/"})
             window.parent.location.href = ctx + "/";
             layer.close(index);
         });
