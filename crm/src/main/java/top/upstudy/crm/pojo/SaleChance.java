@@ -60,7 +60,7 @@ public class SaleChance implements Serializable {
 
     //有可能为需要更新为空值，所以需要验证非空
     @ApiModelProperty(value = "分配人")
-    @TableField(strategy=FieldStrategy.NOT_EMPTY)
+    @TableField(strategy=FieldStrategy.IGNORED)
     private String assignMan;
 
     //通过assignMan获取
