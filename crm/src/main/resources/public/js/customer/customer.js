@@ -51,8 +51,8 @@ layui.use(['table','layer',"form"],function(){
                 curr:1
             },
             where:{
-                cusName:$("input[name='name']").val(),// 客户名
-                cusNo:$("input[name='customer_id']").val(),// 客户编号
+                Name:$("input[name='name']").val(),// 客户名
+                customerId:$("input[name='customer_id']").val(),// 客户编号
                 level:$("#level").val()    //客户级别
             }
         })
